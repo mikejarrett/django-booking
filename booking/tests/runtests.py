@@ -13,23 +13,24 @@ from django.conf import settings
 
 import test_settings
 
+from django_nose import NoseTestSuiteRunner
+
 
 if not settings.configured:
     settings.configure(**test_settings.__dict__)
 
 
-from django_coverage.coverage_runner import CoverageRunner
-from django_nose import NoseTestSuiteRunner
-
-
-class NoseCoverageTestRunner(CoverageRunner, NoseTestSuiteRunner):
+class NoseCoverageTestRunner(NoseTestSuiteRunner):
     """Custom test runner that uses nose and coverage"""
     pass
 
 
 def runtests(*test_args):
-    failures = NoseCoverageTestRunner(verbosity=2, interactive=True).run_tests(
-        test_args)
+    failures = NoseCoverageTestRunner(
+        verbosity=2,
+        interactive=True
+    ).run_tests(test_args)
+
     sys.exit(failures)
 
 

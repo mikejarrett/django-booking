@@ -5,7 +5,6 @@ except ImportError:  # Pre-Django 1.4 version
     from django.conf.urls.defaults import patterns, url
 
 
-
 from . import views
 
 
