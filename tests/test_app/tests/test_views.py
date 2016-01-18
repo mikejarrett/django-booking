@@ -2,11 +2,9 @@
 """ View tests for the ``booking`` app. """
 from django.test import TestCase
 
-from django_libs.tests.factories import UserFactory
-from django_libs.tests.mixins import ViewTestMixin
+from .factories import BookingFactory, UserFactory, ViewTestMixin
 
-from .factories import BookingFactory
-from ..models import Booking
+from booking.models import Booking
 
 
 class BookingCreateViewTestCase(ViewTestMixin, TestCase):
