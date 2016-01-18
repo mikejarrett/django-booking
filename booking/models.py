@@ -41,6 +41,8 @@ class BookingStatus(TranslatableModel):
     def __unicode__(self):
         return self.safe_translation_getter('name', self.slug)
 
+    def __str__(self):
+        return self.safe_translation_getter('name', self.slug)
 
 class Booking(models.Model):
     """
@@ -84,13 +86,15 @@ class Booking(models.Model):
         'auth.User',
         verbose_name=_('User'),
         related_name='bookings',
-        blank=True, null=True,
+        blank=True,
+        null=True,
     )
 
     session = models.ForeignKey(
         'sessions.Session',
         verbose_name=_('Session'),
-        blank=True, null=True,
+        blank=True,
+        null=True,
     )
 
     gender = models.CharField(
@@ -182,12 +186,14 @@ class Booking(models.Model):
 
     date_from = models.DateTimeField(
         verbose_name=_('From'),
-        blank=True, null=True,
+        blank=True,
+        null=True,
     )
 
     date_until = models.DateTimeField(
         verbose_name=_('Until'),
-        blank=True, null=True,
+        blank=True,
+        null=True,
     )
 
     creation_date = models.DateTimeField(
@@ -204,7 +210,8 @@ class Booking(models.Model):
     booking_status = models.ForeignKey(
         'booking.BookingStatus',
         verbose_name=('Booking status'),
-        blank=True, null=True,
+        blank=True,
+        null=True,
     )
 
     notes = models.TextField(
@@ -229,7 +236,8 @@ class Booking(models.Model):
         max_digits=36,
         decimal_places=2,
         verbose_name=_('Total'),
-        blank=True, null=True,
+        blank=True,
+        null=True,
     )
 
     currency = models.CharField(
@@ -242,6 +250,10 @@ class Booking(models.Model):
         ordering = ['-creation_date']
 
     def __unicode__(self):
+        return '#{} ({})'.format(self.booking_id or self.pk,
+                                 self.creation_date)
+
+    def __str__(self):
         return '#{} ({})'.format(self.booking_id or self.pk,
                                  self.creation_date)
 
@@ -283,8 +295,18 @@ class BookingError(models.Model):
     )
 
     def __unicode__(self):
-        return '[{0}] {1} - {2}'.format(self.date, self.booking.booking_id,
-                                        self.message)
+        return '[{0}] {1} - {2}'.format(
+            self.date,
+            self.booking.booking_id,
+            self.message
+        )
+
+    def __str__(self):
+        return '[{0}] {1} - {2}'.format(
+            self.date,
+            self.booking.booking_id,
+            self.message
+        )
 
 
 class BookingItem(models.Model):
@@ -308,14 +330,16 @@ class BookingItem(models.Model):
 
     persons = models.PositiveIntegerField(
         verbose_name=_('Persons'),
-        blank=True, null=True,
+        blank=True,
+        null=True,
     )
 
     subtotal = models.DecimalField(
         max_digits=36,
         decimal_places=2,
         verbose_name=_('Subtotal'),
-        blank=True, null=True,
+        blank=True,
+        null=True,
     )
 
     # GFK 'booked_item'
@@ -332,6 +356,9 @@ class BookingItem(models.Model):
         ordering = ['-booking__creation_date']
 
     def __unicode__(self):
+        return '{} ({})'.format(self.booking, self.booked_item)
+
+    def __str__(self):
         return '{} ({})'.format(self.booking, self.booked_item)
 
     @property
@@ -362,7 +389,8 @@ class ExtraPersonInfo(models.Model):
 
     arrival = models.DateTimeField(
         verbose_name=_('Arrival'),
-        blank=True, null=True,
+        blank=True,
+        null=True,
     )
 
     booking = models.ForeignKey(
@@ -380,4 +408,7 @@ class ExtraPersonInfo(models.Model):
         ordering = ['-booking__creation_date']
 
     def __unicode__(self):
+        return '{} {} ({})'.format(self.forename, self.surname, self.booking)
+
+    def __str__(self):
         return '{} {} ({})'.format(self.forename, self.surname, self.booking)

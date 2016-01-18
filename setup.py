@@ -28,10 +28,11 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'Django>=1.7.0',
+        # 'Django>=1.7.0',
         'django-hvad',
-        'django-libs>=1.35',
-        # 'django-international==0.0.7',
+        'factory-boy',
+        # 'django-libs>=1.35',
+        'django-internationalizer',
     ],
     dependency_links=dependency_links,
 )
